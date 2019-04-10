@@ -1,0 +1,42 @@
+INFO:root:program started at 2019-03-30 21:10:19.880271
+INFO:root:program started at 2019-03-30 21:11:59.984954
+INFO:root:program started at 2019-03-30 21:12:14.259306
+INFO:root:program started at 2019-03-30 21:12:17.530557
+INFO:root:program started at 2019-03-30 21:12:30.738243
+INFO:root:program started at 2019-03-30 21:12:34.531225
+INFO:root:program started at 2019-03-30 21:12:40.024006
+INFO:root:program started at 2019-03-30 21:13:10.381715
+INFO:root:program started at 2019-03-30 21:33:07.814523
+WARNING:root:syntax error: NEW_BOARD
+WARNING:root:syntax error: NEW_BOARD test
+WARNING:root:syntax error: NEW_BOARD test;
+WARNING:root:syntax error: EXIT
+WARNING:root:syntax error: 
+WARNING:root:syntax error: y
+INFO:root:program started at 2019-03-30 21:35:47.224403
+WARNING:root:syntax error: NEW_BOARD test
+WARNING:root:syntax error: EXIT
+INFO:root:program started at 2019-03-30 21:37:07.622246
+INFO:root:program started at 2019-03-30 21:38:14.910179
+INFO:root:program started at 2019-03-30 21:38:50.637147
+INFO:root:program started at 2019-03-30 21:44:11.134553
+INFO:root:program started at 2019-03-30 21:44:51.882907
+INFO:root:Board initialized with tasks {tmp}
+INFO:root:program started at 2019-03-30 21:45:39.451044
+INFO:root:Board initialized with tasks {tmp}
+INFO:root:program started at 2019-03-30 22:18:33.927880
+INFO:root:Board initialized with tasks 
+INFO:root:program started at 2019-03-30 22:19:37.851413
+WARNING:root:syntax error: NEW_BOARD
+INFO:root:Board initialized with tasks None
+INFO:root:program started at 2019-03-30 22:46:57.884732----------------------------------
+INFO:root:Board test initialized with tasks None
+WARNING:root:syntax error: EXIT
+INFO:root:program started at 2019-03-31 20:38:49.323828----------------------------------
+WARNING:root:syntax error: FOCUS
+INFO:root:program started at 2019-04-08 16:06:56.489472----------------------------------
+WARNING:root:syntax error: EXIT
+INFO:root:program started at 2019-04-08 16:07:42.513802----------------------------------
+INFO:root:Board Test initialized with tasks None
+WARNING:root:syntax error: LIST_BOARDS
+INFO:root:program started at 2019-04-08 16:27:38.603564----------------------------------
