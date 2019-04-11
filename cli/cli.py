@@ -16,15 +16,12 @@ logging.info(f'program started at {datetime.now()}------------------------------
 
 # Manages tasks.
 class Task(object):
-    def __init__(self, name, due, importance, timetotake, char=False):
+    def __init__(self, name, due, importance, timetotake, char):
         self.name = name
         self.due = due
         self.importance = importance
         self.timetotake = timetotake
-        if char:
-            self.char = char
-        else:
-            self.char = self.name[0]
+        self.char = char
         self.pomodoros = []
         logging.info(f'New task object {name} created with char {self.char} due {due} with importance level {importance}')
 
@@ -119,8 +116,39 @@ UNFOCUS.docs = """"""
 data.funcs.append(UNFOCUS)
 
 
-def ADD_TASK(args, data):
-    pass
+def ADD_TASK(args, data, datecomp=re.compile(r'(?P<YYYY>\d{4})-(?P<MM>\d{2})-(?P<DD>\d{2})')):
+    if data.focus:
+        argmin = 6
+    else:
+        argmin = 7
+    if len(args) < argmin:
+        print('More arguments needed.')
+        logging.warning("ADD_TASK attempted with an insufficient amount of arguments")
+        return
+
+    due_mode = args[0] == 'direct'
+    name_ = args[1]
+    due_raw = args[2]
+    importance = args[3]
+    timetotake = args[4]
+    char = args[5]
+    if data.focus:
+        focus = data.focus
+    else:
+        focus = args[6]
+
+    dcm = datecomp.match(due_raw)
+    if due_mode:
+        due = datetime.date(
+            int(dcm.group('YYYY')),
+            int(dcm.group('MM')),
+            int(dcm.group('DD'))
+        )
+    else:
+        tod = datetime.date.today()
+        interval = datetime.timedelta(days=int(dcm.group('DD')))
+        due = tod + interval
+    data.boards[focus].tasks.append(Task(name_, due, importance, timetotake, char))
 ADD_TASK.docs = """"""
 data.funcs.append(ADD_TASK)
 
@@ -133,9 +161,15 @@ LIST_BOARDS.docs = """"""
 data.funcs.append(LIST_BOARDS)
 
 
+def SAVE(args, data): # TODO: Make SAVE do stuff.
+    pass
+SAVE.docs = """"""
+data.funcs.append(SAVE)
+
+
 def HELP(args, data):
     print('HELP')
-    #TODO: access function docs and print those.
+    #TODO: write function docs.
     for func in data.funcs:
         print(func.__name__, end=':\n')
         print(func.docs, end='\n\n')
@@ -179,10 +213,10 @@ while True:
         ADD_TASK(args, data)
 
     elif name == 'SAVE':
-        pass # TODO: Create SAVE command
+        SAVE(args, data)
 
     elif name == 'ADD_TASK':
-        ADD_TASK(args, data) # TODO: Set up ADD_TASK command
+        ADD_TASK(args, data)
 
     elif name == 'LIST_BOARDS':
         LIST_BOARDS(args, data)
