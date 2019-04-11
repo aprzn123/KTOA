@@ -40,3 +40,26 @@ INFO:root:program started at 2019-04-08 16:07:42.513802-------------------------
 INFO:root:Board Test initialized with tasks None
 WARNING:root:syntax error: LIST_BOARDS
 INFO:root:program started at 2019-04-08 16:27:38.603564----------------------------------
+INFO:root:program started at 2019-04-10 21:41:49.123468----------------------------------
+WARNING:root:syntax error: NEW_BOARD
+INFO:root:Board test initialized with tasks None
+INFO:root:program started at 2019-04-10 21:51:53.654838----------------------------------
+INFO:root:Board  initialized with tasks None
+WARNING:root:syntax error: LIST_BOARDS
+INFO:root:program started at 2019-04-10 21:53:29.040998----------------------------------
+INFO:root:Board test initialized with tasks None
+INFO:root:program started at 2019-04-10 22:00:39.399591----------------------------------
+INFO:root:Board test initialized with tasks None
+INFO:root:program started at 2019-04-10 22:04:57.162312----------------------------------
+WARNING:root:NEW_BOARD attempted with an insufficient amount of arguments
+INFO:root:Board test initialized with tasks None
+WARNING:root:syntax error: LIST_BOARDS
+INFO:root:Board test2 initialized with tasks None
+WARNING:root:syntax error: LIST_BOARDS
+INFO:root:program started at 2019-04-10 22:12:02.853887----------------------------------
+WARNING:root:NEW_BOARD attempted with an insufficient amount of arguments
+INFO:root:Board test initialized with tasks None
+WARNING:root:syntax error: LIST_BOARDS
+INFO:root:Board test2 initialized with tasks None
+WARNING:root:syntax error: LIST_BOARDS
+INFO:root:New task object asdf created with char A due 2019-04-10 with importance level 100

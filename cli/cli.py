@@ -50,10 +50,13 @@ def parse_input(input_):
     match = choice_regex.match(input_)
     if match is None:
         return
-    return {
+    tmp = {
         'name': match.group('func_name'),
-        'args': match.group('args').split(),
+        'args': [i.strip(' ') for i in match.group('args').split(',')],
     }
+    if len(tmp['args']) == 1 and tmp['args'][0] == '':
+        tmp['args'] = []
+    return tmp
 
 data = DataManager()
 
@@ -139,22 +142,22 @@ def ADD_TASK(args, data, datecomp=re.compile(r'(?P<YYYY>\d{4})-(?P<MM>\d{2})-(?P
 
     dcm = datecomp.match(due_raw)
     if due_mode:
-        due = datetime.date(
-            int(dcm.group('YYYY')),
-            int(dcm.group('MM')),
-            int(dcm.group('DD'))
-        )
+        y = int(dcm.group('YYYY'))
+        m = int(dcm.group('MM'))
+        d = int(dcm.group('DD'))
+        due = date(y, m, d)
     else:
-        tod = datetime.date.today()
-        interval = datetime.timedelta(days=int(dcm.group('DD')))
+        tod = date.today()
+        interval = timedelta(days=int(dcm.group('DD')))
         due = tod + interval
+
     data.boards[focus].tasks.append(Task(name_, due, importance, timetotake, char))
 ADD_TASK.docs = """"""
 data.funcs.append(ADD_TASK)
 
 
 def LIST_BOARDS(args, data):
-    for board, _ in data.boards:
+    for board in data.boards:
         print(board)
     print()
 LIST_BOARDS.docs = """"""
@@ -168,7 +171,7 @@ data.funcs.append(SAVE)
 
 
 def HELP(args, data):
-    print('HELP')
+    print('\nHELP:\n')
     #TODO: write function docs.
     for func in data.funcs:
         print(func.__name__, end=':\n')
@@ -193,7 +196,7 @@ while True:
         logging.warning(f'syntax error: {in_}')
         continue
 
-    name = func['name']
+    name = func['name'].upper()
     args = func['args']
 
 
