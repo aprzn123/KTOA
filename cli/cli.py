@@ -126,7 +126,7 @@ def ADD_TASK(args, data, datecomp=re.compile(r'(?P<YYYY>\d{4})-(?P<MM>\d{2})-(?P
         logging.warning("ADD_TASK attempted with an insufficient amount of arguments")
         return
 
-    due_mode = args[0] == 'direct'
+    due_mode = args[0].lower() == 'direct'
     name_ = args[1]
     due_raw = args[2]
     importance = args[3]
