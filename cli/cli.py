@@ -62,8 +62,8 @@ data = DataManager()
 
 #!  ______________________________________________________  !#
 #! \                                                      \ !#
-#! |                Here are the functions                | !#
-#! \     They run the commands that the user executes     \ !#
+#! |================Here are the functions================| !#
+#! \=====They run the commands that the user executes=====\ !#
 #! |______________________________________________________| !#
 
 def QUIT(data):
@@ -74,7 +74,8 @@ def QUIT(data):
         response = input()
         if response == 'y':
             quit()
-QUIT.docs = """"""
+QUIT.docs = """Exits the application.
+0 arguments"""
 data.funcs.append(QUIT)
 
 
@@ -89,13 +90,15 @@ def NEW_BOARD(args, data):
     try:
         data.boards[name]
     except KeyError:
-        data.boards[name] = Board(name, [])
+        data.boards[name] = Board(name, {})
         print(f'Board {name} created.')
         data.saved = False
     else:
         print('There is already a board with this name.')
         logging.warning(f'NEW_BOARD attempted with already-existing board')
-NEW_BOARD.docs = """"""
+NEW_BOARD.docs = """Creates a new board. 
+1 argument:
+Name - name of the board"""
 data.funcs.append(NEW_BOARD)
 
 
@@ -109,17 +112,28 @@ def FOCUS(args, data):
         logging.warning('FOCUS attempted on nonexistent board')
         return
     data.focus = args[0]
-FOCUS.docs = """"""
+FOCUS.docs = """Focuses on a board so you can reference the board without
+mentioning it in future commands (e.g. add a task to the board without
+mentioning the name of the board).
+1 argument:
+Board - name of the board to focus on"""
 data.funcs.append(FOCUS)
 
 
 def UNFOCUS(args, data):
     data.focus = False
-UNFOCUS.docs = """"""
+UNFOCUS.docs = """cancels the focusing on a board.
+0 arguments"""
 data.funcs.append(UNFOCUS)
 
 
-def ADD_TASK(args, data, datecomp=re.compile(r'(?P<YYYY>\d{4})-(?P<MM>\d{2})-(?P<DD>\d{2})')):
+def ADD_TASK(
+            args,
+            data,
+            datecomp=re.compile(r'(?P<YYYY>\d{4})-(?P<MM>\d{2})-(?P<DD>\d{2})'),
+            deltacomp=re.compile(r'(?P<days>\d+)'),
+            timecomp=re.compile(r'(?P<HH>\d{2}):(?P<MM>\d{2})')
+    ):
     if data.focus:
         argmin = 6
     else:
@@ -133,26 +147,47 @@ def ADD_TASK(args, data, datecomp=re.compile(r'(?P<YYYY>\d{4})-(?P<MM>\d{2})-(?P
     name_ = args[1]
     due_raw = args[2]
     importance = args[3]
-    timetotake = args[4]
+    timetotake_raw = args[4]
     char = args[5]
     if data.focus:
         focus = data.focus
     else:
         focus = args[6]
-
-    dcm = datecomp.match(due_raw)
     if due_mode:
+        dcm = datecomp.match(due_raw)
         y = int(dcm.group('YYYY'))
         m = int(dcm.group('MM'))
         d = int(dcm.group('DD'))
         due = date(y, m, d)
     else:
+        dcm = deltacomp.match(due_raw)
         tod = date.today()
-        interval = timedelta(days=int(dcm.group('DD')))
+        interval = timedelta(days=int(dcm.group('days')))
         due = tod + interval
 
-    data.boards[focus].tasks.append(Task(name_, due, importance, timetotake, char))
-ADD_TASK.docs = """"""
+    tcm = timecomp.match(timetotake_raw)
+    h = int(tcm.group('HH'))
+    m = int(tcm.group('MM'))
+    timetotake = timedelta(hours=h, minutes=m)
+
+    data.boards[focus].tasks[char] = Task(
+                                        name_,
+                                        due,
+                                        importance,
+                                        timetotake,
+                                        char
+    )
+ADD_TASK.docs = """adds a task to a board (either passed as an argument or focused on)
+6 or 7 arguments:
+due_mode - whether the due date is direct (give a specific date) or relative (give how
+           long until it's due)
+name - the name of the task
+due - the date it's due (in YYYY-MM-DD format) if you chose direct due mode or how long
+      till it's due (just number of days) if you chose relative due mode
+importance - a number from 1 to 10: 1 being the least important and 10 being the most important
+timetotake - an estimate as to how long an activity will take, in HH:MM format
+char - the character used to identify the task in retrieving it from the board
+focus (OPTIONAL) - if not focused, determines which board to add the task to"""
 data.funcs.append(ADD_TASK)
 
 
@@ -182,7 +217,7 @@ data.funcs.append(ADD_TASK)
 
 #!  ______________________________________________________  !#
 #! \                                                      \ !#
-#! |                 Here is the mainloop                 | !#
+#! |=================Here is the mainloop=================| !#
 #! \______________________________________________________\ !#
 
 
