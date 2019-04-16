@@ -1,5 +1,0 @@
-INFO:root:program started at 2019-04-10 21:37:58.596263----------------------------------
-WARNING:root:syntax error: LIST_BOARDS
-WARNING:root:syntax error: NEW_BOARD asdf
-INFO:root:Board asdf initialized with tasks None
-INFO:root:program started at 2019-04-11 20:55:54.733076----------------------------------
