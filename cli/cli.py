@@ -27,7 +27,10 @@ class Task(object):
         self.char = char
         self.pomodoros = []
         self.metadata = {
-            'created'
+            'created': datetime.now(),
+            'updated': datetime.now(),
+            'creator': username,
+            'updator': username,
         }
         logging.info(f'New task object {name} created with char {self.char} due {due} with importance level {importance}')
 
@@ -37,8 +40,10 @@ class Board(object):
         self.name = name
         self.tasks = tasks
         self.metadata = {
-            'created' = datetime.now(),
-            'updated' = datetime.now(),
+            'created': datetime.now(),
+            'updated': datetime.now(),
+            'creator': username,
+            'updator': username,
         }
         tmp = ', '.join(tasks) if len(tasks) > 0 else 'None'
         logging.info(f'Board {name} initialized with tasks {tmp}')
@@ -52,7 +57,8 @@ class Board(object):
             print('There is already a task with that char')
             logging.warning('Cannot create a new task when '
                             'there is already a task with the same char')
-        self.metdata[updated] = datetime.now()
+        self.metadata['updated'] = datetime.now()
+        self.metadata['updator'] = username
 
     def disp(self):
         pass
