@@ -1,4 +1,5 @@
 import logging
+import os
 import re
 from datetime import timedelta, date, datetime
 
@@ -42,6 +43,10 @@ class DataManager(object):
     focus = False
     saved = True
     funcs = []
+    bin_key = {
+        'start_meta': 65535,
+        'end_meta': 65534,
+    }
 
 # Regex to parse user input.
 choice_regex = re.compile(r'(?P<func_name>[\w_]+)\((?P<args>.*)\)')
@@ -205,6 +210,53 @@ SAVE.docs = """"""
 data.funcs.append(SAVE)
 
 
+def LOAD(args, data):
+    if len(args) < 1:
+        print('More arguments needed.')
+        logging.warning("LOAD attempted with an insufficient amount of arguments")
+        return
+
+    if '/' in args[0]:
+        path = args[0].split('/')
+        path.insert(1, os.sep)
+        if path[-1][-5:] not in ('.ktoa', '.ktot'):
+            path[-1] += '.ktoa'
+        file = os.path.join(*path)
+
+    elif '\\' in args[0]:
+        path = args[0].split('\\')
+        path.insert(1, os.sep)
+        if path[-1][-5:] not in ('.ktoa', '.ktot'):
+            path[-1] += '.ktoa'
+        file = os.path.join(*path)
+
+    else:
+        name = args[0]
+        if name[-5:] not in ('.ktoa', '.ktot'):
+            name += '.ktoa'
+        file = name
+
+    metadata = False
+
+    with open(file, 'rb') as f:
+        while  True:
+            latest_data = bytes(f.read(2))
+            if latest_data == b'':
+                break
+            value = int.from_bytes(latest_data, byteorder='big')
+            if value == data.bin_key['start_meta']:
+                metatdata = True
+                continue
+            if value == data.bin_key['end_meta']:
+                metadata = False
+                continue
+
+            if metadata:
+                pass # TODO: manage metadata (after metadata branch done)
+LOAD.docs = """"""
+data.funcs.append(LOAD)
+
+
 def HELP(args, data):
     print('\nHELP:\n')
     #TODO: write function docs.
@@ -261,3 +313,6 @@ while True:
 
     elif name == 'HELP':
         HELP(args, data)
+
+    elif name == 'LOAD':
+        LOAD(args, data)
