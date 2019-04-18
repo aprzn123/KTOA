@@ -2,6 +2,9 @@ import logging
 import re
 from datetime import timedelta, date, datetime
 
+print('Enter your name:', end=' ')
+username = input()
+
 # Separates dev log from standard log.
 DEVLOAD = True
 
@@ -23,6 +26,9 @@ class Task(object):
         self.timetotake = timetotake
         self.char = char
         self.pomodoros = []
+        self.metadata = {
+            'created'
+        }
         logging.info(f'New task object {name} created with char {self.char} due {due} with importance level {importance}')
 
 # A board is a collection of tasks. While it should not be necessary, it is possible to have multiple.
@@ -30,8 +36,23 @@ class Board(object):
     def __init__(self, name, tasks):
         self.name = name
         self.tasks = tasks
+        self.metadata = {
+            'created' = datetime.now(),
+            'updated' = datetime.now(),
+        }
         tmp = ', '.join(tasks) if len(tasks) > 0 else 'None'
         logging.info(f'Board {name} initialized with tasks {tmp}')
+
+    def new_task(self, char, task):
+        try:
+            self.tasks[char]
+        except: 
+            self.tasks[char] = task
+        else:
+            print('There is already a task with that char')
+            logging.warning('Cannot create a new task when '
+                            'there is already a task with the same char')
+        self.metdata[updated] = datetime.now()
 
     def disp(self):
         pass
@@ -170,13 +191,14 @@ def ADD_TASK(
     m = int(tcm.group('MM'))
     timetotake = timedelta(hours=h, minutes=m)
 
-    data.boards[focus].tasks[char] = Task(
+    data.boards[focus].new_task(char, Task(
                                         name_,
                                         due,
                                         importance,
                                         timetotake,
                                         char
-    )
+    ))
+    saved = False
 ADD_TASK.docs = """adds a task to a board (either passed as an argument or focused on)
 6 or 7 arguments:
 due_mode - whether the due date is direct (give a specific date) or relative (give how
